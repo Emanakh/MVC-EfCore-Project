@@ -1,0 +1,50 @@
+﻿@model Department;
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <meta name="viewport" content="width=device-width" />
+    <title>ShowCourses</title>
+</head>
+<body>
+    <div class="d-grid gap-2 my-1">
+        <h1 class="m-auto"> Department @Model.DeptName Has Courses: </h1>
+
+    </div>
+    <table class="table table-bordered table-hover">
+        <thead>
+
+            <tr>
+                <td> Course Id</td>
+                <td>Course Name</td>
+                <td>Course Duration</td>
+                <td>Grading</td>
+               
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (Course d in Model.Courses)
+            {
+                <tr>
+                    <td>@d.Id</td>
+                    <td>@d.CrsName</td>
+                    <td>
+                       @d.Duration
+                    </td>
+                    <td>
+                        <a asp-action="SetGrade" asp-controller="DepartmentCourse" asp-route-DeptId="@Model.DeptId" class="btn btn-primary" asp-route-crsId="@d.Id">Set Grades</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+
+
+    </table>
+
+</body>
+</html>

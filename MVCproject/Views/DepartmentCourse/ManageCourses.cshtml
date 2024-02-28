@@ -1,0 +1,33 @@
+﻿@* @model Department;
+ *@
+ @model DeptCourses
+ @{
+    Layout = null;
+    SelectList CoursesInDept = new SelectList(Model.department.Courses, "Id", "CrsName");
+    SelectList CoursesNotInDept = new SelectList(Model.CoursesNotInDept, "Id", "CrsName");
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <meta name="viewport" content="width=device-width" />
+    <title>ManageCourses</title>
+</head>
+<body>
+	<form method="post">
+		<label>Choose Courses To Remove</label>
+
+		<select class="form-select" name="CoursesToRemove" asp-items="CoursesInDept" multiple aria-label="multiple select example">
+		</select>
+        <label>Choose Courses To Add</label>
+        <select class="form-select" name="CoursesToAdd" asp-items="CoursesNotInDept" multiple aria-label="multiple select example">
+        </select>
+      
+
+        <input type="submit" value="Update" class="btn btn-info"/>
+    </form>
+</body>
+</html>

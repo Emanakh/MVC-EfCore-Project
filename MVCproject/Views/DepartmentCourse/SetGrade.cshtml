@@ -1,0 +1,28 @@
+﻿@model DeptCourses;
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+    <meta name="viewport" content="width=device-width" />
+    <title>SetGrade</title>
+</head>
+<body>
+    <h1>@Model.department.DeptName department - @Model.Course.CrsName Course Grades</h1>
+    <form method="post">
+        @foreach(var c in Model.department.Students)
+        {
+            <div class="input-group mb-3">
+                <span class="input-group-text" id="inputGroup-sizing-default">@c.Name</span>
+                <input name="degree.@c.Id" type="text"  class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+            </div>
+        }
+        <input value="Set Grades" type="submit" class="btn btn-primary" />
+    </form>
+</body>
+</html>

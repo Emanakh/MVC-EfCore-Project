@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using MVCproject.Models;
 using MVCproject.Repository;
@@ -12,13 +13,17 @@ namespace MVCproject
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+            builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();
+
             //connection with dbcontext
             builder.Services.AddDbContext<AppDbContext>(
                 a => a.UseSqlServer(builder.Configuration.GetConnectionString("ConnectionStr1"))
                 );
+
             //repos
-            builder.Services.AddTransient<IDepartmentRepo, DepartmentRepo>();
-            builder.Services.AddTransient<IStudentRepo, StudentRepo>();
+            builder.Services.AddScoped<IDepartmentRepo, DepartmentRepo>();
+            builder.Services.AddScoped<IStudentRepo, StudentRepo>();
+            builder.Services.AddScoped<IAccount, AccountRepo>();
 
 
 
@@ -37,6 +42,7 @@ namespace MVCproject
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapControllerRoute(

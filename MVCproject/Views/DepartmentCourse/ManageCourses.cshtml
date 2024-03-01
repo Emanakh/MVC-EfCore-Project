@@ -3,7 +3,7 @@
  @model DeptCourses
 @{
     Layout = "_Layout";
-    ViewBag.title = "ManageCourses";
+    ViewData["Title"] = "ManageCourses";
     SelectList CoursesInDept = new SelectList(Model.department.Courses, "Id", "CrsName");
     SelectList CoursesNotInDept = new SelectList(Model.CoursesNotInDept, "Id", "CrsName");
 }

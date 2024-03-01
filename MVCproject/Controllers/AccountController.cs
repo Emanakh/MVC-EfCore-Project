@@ -89,7 +89,7 @@ namespace MVCproject.Controllers
         [Authorize]
         public async Task<IActionResult> Logout()
         {
-            HttpContext.SignOutAsync();
+            await HttpContext.SignOutAsync();
             return RedirectToAction("Index", "Home");
 
 

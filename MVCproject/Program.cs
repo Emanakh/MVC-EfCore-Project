@@ -1,3 +1,5 @@
+using Microsoft.EntityFrameworkCore;
+using MVCproject.Models;
 using MVCproject.Repository;
 
 namespace MVCproject
@@ -10,7 +12,10 @@ namespace MVCproject
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
-
+            //connection with dbcontext
+            builder.Services.AddDbContext<AppDbContext>(
+                a => a.UseSqlServer(builder.Configuration.GetConnectionString("ConnectionStr1"))
+                );
             //repos
             builder.Services.AddTransient<IDepartmentRepo, DepartmentRepo>();
             builder.Services.AddTransient<IStudentRepo, StudentRepo>();

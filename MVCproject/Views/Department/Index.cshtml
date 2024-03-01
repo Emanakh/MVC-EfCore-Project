@@ -1,17 +1,9 @@
 ﻿@model IEnumerable<Department>;
 @{
-    Layout = null;
+    Layout = "_Layout";
+    ViewBag.title = "Index";
 }
 
-<!DOCTYPE html>
-
-<html>
-<head>
-        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <meta name="viewport" content="width=device-width" />
-    <title>Index</title>
-</head>
-<body>
     <div class="d-grid gap-2  my-1">
         <a class="btn btn-primary" href="/department/create">Create Department</a>
 
@@ -35,11 +27,6 @@
                     <td>@d.DeptName</td>
                     <td>
                         <button class="btn btn-primary" onclick="display(@d.DeptId)">details on page</button>
-
-                        @*{
-<a asp-action="details" asp-controller="department" class="btn btn-primary" asp-route-id="@d.DeptId">Details</a>
-                      
-                        }*@ 
                     </td>
                     <td>
                         <a asp-controller="department" asp-action="edit" asp-route-id="@d.DeptId" class="btn btn-success">Edit</a>
@@ -82,6 +69,3 @@
             $("#display").load("/department/details/"+id)
         }
     </script>
-    
-</body>
-</html>

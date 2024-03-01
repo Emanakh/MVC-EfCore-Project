@@ -1,22 +1,13 @@
 ﻿@* @model Department;
  *@
  @model DeptCourses
- @{
-    Layout = null;
+@{
+    Layout = "_Layout";
+    ViewBag.title = "ManageCourses";
     SelectList CoursesInDept = new SelectList(Model.department.Courses, "Id", "CrsName");
     SelectList CoursesNotInDept = new SelectList(Model.CoursesNotInDept, "Id", "CrsName");
 }
 
-<!DOCTYPE html>
-
-<html>
-<head>
-
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <meta name="viewport" content="width=device-width" />
-    <title>ManageCourses</title>
-</head>
-<body>
 	<form method="post">
 		<label>Choose Courses To Remove</label>
 
@@ -29,5 +20,3 @@
 
         <input type="submit" value="Update" class="btn btn-info"/>
     </form>
-</body>
-</html>

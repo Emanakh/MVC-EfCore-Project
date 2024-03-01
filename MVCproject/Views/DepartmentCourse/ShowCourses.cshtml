@@ -1,17 +1,10 @@
 ﻿@model Department;
 @{
-    Layout = null;
+    Layout = "_Layout";
+    ViewBag.title = "ShowCourses"; 
 }
 
-<!DOCTYPE html>
 
-<html>
-<head>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <meta name="viewport" content="width=device-width" />
-    <title>ShowCourses</title>
-</head>
-<body>
     <div class="d-grid gap-2 my-1">
         <h1 class="m-auto"> Department @Model.DeptName Has Courses: </h1>
 
@@ -45,6 +38,3 @@
 
 
     </table>
-
-</body>
-</html>

@@ -8,6 +8,19 @@ namespace MVCproject.Models
         public DbSet<Department> Departments { get; set; }
         public DbSet<Course> Courses { get; set; }
         public DbSet<StudentCourse> StudentCourses { get; set; }
+        public DbSet<User> Users { get; set; }
+        public DbSet<Role> Roles { get; set; }
+
+
+        public AppDbContext()
+        {
+
+        }
+        public AppDbContext(DbContextOptions options) : base(options)
+        {
+
+
+        }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer("Data Source=.; Initial Catalog= University; Integrated Security=True;Connect Timeout=30;Encrypt=True;Trust Server Certificate=True;Application Intent=ReadWrite;Multi Subnet Failover=False");

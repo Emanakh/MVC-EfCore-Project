@@ -7,8 +7,7 @@ namespace MVCproject.Controllers
 {
     public class DepartmentController : Controller
     {
-        IDepartmentRepo DeptRepo; // = new DepartmentRepo();
-                                  // AppDbContext db = new AppDbContext();
+        IDepartmentRepo DeptRepo;
         public DepartmentController(IDepartmentRepo _DeptRepo)
         {
             DeptRepo = _DeptRepo;
@@ -18,8 +17,6 @@ namespace MVCproject.Controllers
             var model = DeptRepo.GetAll();
             return View(model);
         }
-
-        //add department
         public IActionResult Create()
         {
             return View();
@@ -34,8 +31,6 @@ namespace MVCproject.Controllers
             }
             else return View(dept);
         }
-
-        //details of departments on page
         public IActionResult Details(int? id)
         {
             if (id == null)
@@ -49,8 +44,6 @@ namespace MVCproject.Controllers
             }
             else return PartialView(dept);
         }
-
-        //edit a department
         public IActionResult Edit(int? id)
         {
             if (id == null)
@@ -72,8 +65,6 @@ namespace MVCproject.Controllers
             DeptRepo.Update(dept, id);
             return RedirectToAction("Index");
         }
-
-        //delete department 
         public IActionResult Delete(int? id)
         {
 

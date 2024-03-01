@@ -1,18 +1,9 @@
 ﻿@model DeptCourses;
 @{
-    Layout = null;
+    Layout = "_Layout";
+    ViewBag.title = "SetGrade";
 }
 
-<!DOCTYPE html>
-
-<html>
-<head>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-
-    <meta name="viewport" content="width=device-width" />
-    <title>SetGrade</title>
-</head>
-<body>
     <h1>@Model.department.DeptName department - @Model.Course.CrsName Course Grades</h1>
     <form method="post">
         @foreach(var c in Model.department.Students)
@@ -24,5 +15,3 @@
         }
         <input value="Set Grades" type="submit" class="btn btn-primary" />
     </form>
-</body>
-</html>

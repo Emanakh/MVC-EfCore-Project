@@ -6,157 +6,135 @@ using System.Runtime.Intrinsics.X86;
 
 namespace MVCproject.Controllers
 {
-    public class StudentController : Controller
-    {
-        AppDbContext db = new AppDbContext();
+	public class StudentController : Controller
+	{
+		//AppDbContext db = new AppDbContext();
 
-        // dept, student repo 
-        IDepartmentRepo DeptRepo;
-        IStudentRepo StRepo;
-        public StudentController(IStudentRepo _StRepo, IDepartmentRepo _DeptRepo)
-        {
-            StRepo = _StRepo;
-            DeptRepo = _DeptRepo;
-        }
+		// dept, student repo 
+		IDepartmentRepo DeptRepo;
+		IStudentRepo StRepo;
+		public StudentController(IStudentRepo _StRepo, IDepartmentRepo _DeptRepo)
+		{
+			StRepo = _StRepo;
+			DeptRepo = _DeptRepo;
+		}
 
-        public IActionResult Index()
-        {
-            //IEnumerable<Student> model = db.Students.Include(s => s.Department).ToList();
-            IEnumerable<Student> model = StRepo.GetAll();
-            return View(model);
-        }
+		public IActionResult Index()
+		{
+			IEnumerable<Student> model = StRepo.GetAll();
+			return View(model);
+		}
+		public IActionResult Create()
+		{
+			ViewBag.depts = DeptRepo.GetAll();
+			return View();
+		}
+		[HttpPost]
+		public IActionResult Create(Student st, IFormFile stimg)
+		{
+			if (ModelState.IsValid && stimg != null && stimg.Length > 0)
+			{
+				using (MemoryStream ms = new MemoryStream())
+				{
+					stimg.CopyTo(ms);
+					st.Image = ms.ToArray();
+				}
+				StRepo.Add(st);
+				return RedirectToAction("Index");
+			}
+			else
+			{
+				ModelState.AddModelError("", "please Douple check your data");
+				ViewBag.depts = DeptRepo.GetAll();
+				return View(st);
 
-        //add student
-        public IActionResult Create()
-        {
-            //IEnumerable<Department> depts = DeptRepo.GetAll();
-            ViewBag.depts = DeptRepo.GetAll();
-            return View();
-        }
-        [HttpPost]
-        public IActionResult Create(Student st, IFormFile stimg)
-        {
-            if (ModelState.IsValid && stimg != null && stimg.Length > 0)
-            {
-                using (MemoryStream ms = new MemoryStream())
-                {
-                    stimg.CopyTo(ms);
-                    st.Image = ms.ToArray();
-                }
+			}
+		}
+		public IActionResult Details(int? id)
+		{
+			if (id == null)
+			{
+				return BadRequest();
+			}
+			Student st = StRepo.GetById(id.Value);
+			if (st == null)
+			{
+				return NotFound();
+			}
+			else
+			{
+				string imgdata = Convert.ToBase64String(st.Image);
+				string imgUrl = string.Format("data:image/;base64,{0}", imgdata);
+				ViewBag.imgUrl = imgUrl;
+				return PartialView(st);
+			}
+		}
+		public IActionResult Edit(int? id)
+		{
+			if (id == null)
+			{
+				return BadRequest();
+			}
+			Student st = StRepo.GetById(id.Value);
+			if (st == null)
+			{
+				return NotFound();
+			}
+			else
+			{
+				ViewBag.depts = DeptRepo.GetAll();
+				return View(st);
+			}
+		}
 
-                //db.Students.Add(st);
-                //db.SaveChanges();
-                StRepo.Add(st);
-                return RedirectToAction("Index");
-            }
-            else
-            {
-                //IEnumerable<Department> depts = DeptRepo.GetAll();
-                ViewBag.depts = DeptRepo.GetAll();
-                return View(st);
+		[HttpPost]
 
-            }
-        }
-        //details of student on page
-        public IActionResult Details(int? id)
-        {
-            if (id == null)
-            {
-                return BadRequest();
-            }
+		public IActionResult Edit(Student st, IFormFile stimg)
+		{
+			Student old = StRepo.GetById(st.Id);
+			if (stimg != null && stimg.Length > 0)
+			{
+				using (MemoryStream ms = new MemoryStream())
+				{
+					stimg.CopyTo(ms);
+					old.Image = ms.ToArray();
+				}
+			}
+			StRepo.Update(old, st);
+			return RedirectToAction("Index");
+		}
+		public IActionResult Delete(int? id)
+		{
+			if (id == null)
+			{
+				return BadRequest();
+			}
 
-            //Student? st = db.Students.Include(f => f.Department).SingleOrDefault(d => d.Id == id);
-            Student st = StRepo.GetById(id.Value);
-            if (st == null)
-            {
-                return NotFound();
-            }
-            else
-            {
-                string imgdata =
-Convert.ToBase64String(st.Image);
-                string imgUrl =
-            string.Format("data:image/;base64,{0}",
-            imgdata);
-                ViewBag.imgUrl = imgUrl;
-                return PartialView(st);
-            }
-        }
+			Student? st = StRepo.GetById(id.Value);
+			if (st == null)
+			{
+				return NotFound();
+			}
+			else
+			{
+				StRepo.SoftDelete(id.Value);
+				return RedirectToAction("Index");
 
-        //edit a sudent
-        public IActionResult Edit(int? id)
-        {
-            if (id == null)
-            {
-                return BadRequest();
-            }
-            //Student? st = db.Students.SingleOrDefault(d => d.Id == id);
-            Student st = StRepo.GetById(id.Value);
-            if (st == null)
-            {
-                return NotFound();
-            }
-            else
-            {
-                //IEnumerable<Department> depts = DeptRepo.GetAll();
-                ViewBag.depts = DeptRepo.GetAll(); ;
+			}
+		}
 
+		public IActionResult CheckEmail(string Email)
+		{
+			var st = StRepo.GetAll().FirstOrDefault(s => s.Email == Email);
+			if (st != null)
+			{
+				return Json("there's an existing email with the same name");
+			}
+			else
+			{
+				return Json(true);
+			}
+		}
 
-
-                return View(st);
-            }
-        }
-
-        [HttpPost]
-
-        public IActionResult Edit(Student st, IFormFile stimg)
-        {
-
-            //var old = db.Students.FirstOrDefault(d => d.Id == st.Id);
-            Student old = StRepo.GetById(st.Id);
-            if (stimg != null && stimg.Length > 0)
-            {
-                using (MemoryStream ms = new MemoryStream())
-                {
-                    stimg.CopyTo(ms);
-                    old.Image = ms.ToArray();
-                }
-            }
-            //old.Age = st.Age;
-            //old.Email = st.Email;
-            //old.DeptNo = st.DeptNo;
-            //old.Name = st.Name;
-            //db.SaveChanges();
-            StRepo.Update(old, st);
-            return RedirectToAction("Index");
-        }
-
-
-
-
-
-        //delete student 
-        public IActionResult Delete(int? id)
-        {
-            if (id == null)
-            {
-                return BadRequest();
-            }
-
-            Student? st = StRepo.GetById(id.Value);
-            if (st == null)
-            {
-                return NotFound();
-            }
-            else
-            {
-                //db.Students.Remove(st);
-                //db.SaveChanges();
-                StRepo.SoftDelete(id.Value);
-                return RedirectToAction("Index");
-
-            }
-        }
-
-    }
+	}
 }

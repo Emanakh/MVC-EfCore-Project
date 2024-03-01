@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MVCproject.Models;
 using MVCproject.Repository;
 
 namespace MVCproject.Controllers
 {
+
     public class DepartmentController : Controller
     {
         IDepartmentRepo DeptRepo;
@@ -12,11 +14,14 @@ namespace MVCproject.Controllers
         {
             DeptRepo = _DeptRepo;
         }
+
         public IActionResult Index()
         {
             var model = DeptRepo.GetAll();
             return View(model);
         }
+        [Authorize(Roles = "Admin")]
+
         public IActionResult Create()
         {
             return View();
@@ -31,6 +36,8 @@ namespace MVCproject.Controllers
             }
             else return View(dept);
         }
+        [Authorize(Roles = "Instructor")]
+
         public IActionResult Details(int? id)
         {
             if (id == null)
@@ -44,6 +51,7 @@ namespace MVCproject.Controllers
             }
             else return PartialView(dept);
         }
+        [Authorize(Roles = "Admin")]
         public IActionResult Edit(int? id)
         {
             if (id == null)
@@ -65,6 +73,8 @@ namespace MVCproject.Controllers
             DeptRepo.Update(dept, id);
             return RedirectToAction("Index");
         }
+        [Authorize(Roles = "Admin")]
+
         public IActionResult Delete(int? id)
         {
 

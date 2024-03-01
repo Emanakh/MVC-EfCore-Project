@@ -2,7 +2,7 @@
 
 namespace MVCproject.ViewModels
 {
-    public class Register
+    public class RegisterViewModel
     {
         public string Name { get; set; }
         public int Age { get; set; }
